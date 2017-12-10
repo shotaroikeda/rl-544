@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from memory.replay import PrioritizedReplayMemory
 from networks.network import DQN, print_weight
 from simulators.gym_simulator import CartPole
