@@ -32,7 +32,7 @@ class ReplayMemory(object):
 
 class PrioritizedReplayMemory(object):
 
-    def __init__(self, state_shape, capacity=1 << 15, eps=1e-6, alpha=0.8, mode=torch):
+    def __init__(self, state_shape, n_sims, capacity=1 << 15, eps=1e-6, alpha=0.8, mode=torch):
         self.capacity = capacity
         self.tree = torch.zeros(2 * capacity - 1)
         self.states = torch.zeros(*((capacity,) + state_shape))
@@ -40,6 +40,7 @@ class PrioritizedReplayMemory(object):
         self.rwrds = torch.zeros(capacity)
         self.terms = torch.zeros(capacity).byte()
         self.state_shape = state_shape
+        self.n_sims = n_sims
 
         self.position = 0
         self.eps = eps
@@ -109,7 +110,7 @@ class PrioritizedReplayMemory(object):
                     self.rwrds[dataIdx],
                     self.actions[dataIdx],
                     self.terms[dataIdx],
-                    self.states[(dataIdx + 1) % self.capacity])
+                    self.states[(dataIdx + self.n_sims) % self.capacity])
 
     def _to_torch(self, arr):
         if isinstance(arr, np.ndarray):
