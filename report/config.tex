@@ -16,9 +16,9 @@
   Mishra, Akshay\\
   \texttt{akmishr2@illinois.edu}
   % Add for shubshub
-  % \and
-  % Agarwal, Shubhankar\\
-  % \texttt{mystery@illinois.edu}
+  \and
+  Agarwal, Shubhankar\\
+  \texttt{mystery@illinois.edu}
 }
 
 % Project title
@@ -31,6 +31,16 @@
     \begin{center}
       #1
     \end{center}
-    \caption{#2}
+    \captionof{figure}{#2}
+  \end{figure}
+}%
+
+\newcommand{\plt}[2]{%
+  % Use: \gfx{path}{opts}
+  \begin{figure}[h!]
+    \begin{center}
+      \includegraphics[width=0.5\linewidth]{assets/#1}
+    \end{center}
+    \captionof{figure}{#2}
   \end{figure}
 }%

@@ -440,14 +440,8 @@ class Trainer(object):
         self.eval_simulator.close()
 
 
-def main(num_runs=5):
+def main(num_runs=5, p_alpha=0.0, lr=0.025, history_size=10, gamma=0.99, n_simulators=8):
     results = []
-
-    p_alpha = 0.0
-    lr = 0.025
-    history_size = 10
-    gamma = 0.99
-    n_simulators = 8
 
     for _ in range(num_runs):
         if CUDA:
@@ -492,7 +486,7 @@ def main(num_runs=5):
     if issubclass(optimizer, torch.optim.LBFGS):
         plt.title('Rewards for LBFGS $\\alpha={:.2f},\\eta={:.2f},h={:d}$'.format(
             p_alpha, lr, history_size))
-        img_nm = 'lbfgs_{:.2f}_{:.2f}_{:d}.png'.format(p_alpha, lr, history_size)
+        img_nm = 'lbfgs_{:.2f}_{:.2f}_{:03d}.png'.format(p_alpha, lr, history_size)
     else:
         plt.title('Rewards for ADAM $\\alpha={:.2f},\\eta={:.2f}$'.format(p_alpha, lr))
         img_nm = 'adam_{:.2f}_{:.2f}.png'.format(p_alpha, lr)
@@ -502,8 +496,12 @@ def main(num_runs=5):
     plt.fill_between(x, mean_rewards - var_rewards, mean_rewards + var_rewards, alpha=0.2)
     plt.savefig('report/assets/%s' % (img_nm), dpi=150)
 
-    np.save('report/assets/%s.npy' % (img_nm), results)
+    np.save('report/assets/%s.npy' % (img_nm[:-4]), results)
 
 
 if __name__ == '__main__':
-    main()
+    for hst in [1, 5, 20]:
+        main(history_size=hst)
+
+    for p_alpha in [0.2, 0.6, 0.9]:
+        main(p_alpha=p_alpha)
